@@ -36,7 +36,10 @@ class Dispatch(object):
 
         for patterns, function in self._functions.items():
             if all(arguments[pattern] for pattern in patterns):
-                function(**self._kwargify(arguments))
+                if function.__name__ == 'setup':
+                    function()
+                else:
+                    function(**self._kwargify(arguments))
                 return
         raise DispatchError('None of dispatch conditions %s is triggered'
                             % self._formated_patterns)
